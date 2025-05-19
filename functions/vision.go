@@ -1,4 +1,4 @@
-package vision
+package functions
 
 import (
 	"bytes"
@@ -10,7 +10,7 @@ import (
 
 func ClassifyImage(imageUrl string) ([]string, error) {
 	body, _ := json.Marshal(map[string]string{"url": imageUrl})
-	req, _ := http.NewRequest("POST", os.Getenv("CV_API_ENDPOINT")+"/vision/v3.2/tag", bytes.NewReader(Body))
+	req, _ := http.NewRequest("POST", os.Getenv("CV_API_ENDPOINT")+"/vision/v3.2/tag", bytes.NewReader(body))
 	req.Header.Add("Ocp-Apim_Subscription-Key", os.Getenv("CV_API_KEY"))
 	req.Header.Add("Content-Type", "application/json")
 

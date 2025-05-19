@@ -1,8 +1,6 @@
-package handler
+package functions
 
 import (
-	"azure-ai-image-processing/functions/cosmos"
-	"azure-ai-image-processing/functions/vision"
 	"encoding/json"
 	"net/http"
 )
@@ -13,18 +11,18 @@ type Event struct {
 	} `json:"data"`
 }
 
-func handleEvent(w http.ResponseWriter, r *http.Request) {
+func HandleEvent(w http.ResponseWriter, r *http.Request) {
 	var events []Event
 	_ = json.NewDecoder(r.Body).Decode((&events))
 
 	imageUrl := events[0].Data.URL
-	tags, err := vision.ClassifyImage(imageUrl)
+	tags, err := ClassifyImage(imageUrl)
 	if err != nil {
 		http.Error(w, err.Error(), 500)
 		return
 	}
 
-	_ = cosmos.Save(imageUrl, tags)
+	_ = Save(imageUrl, tags)
 	w.Write([]byte("Image processed"))
 
 }

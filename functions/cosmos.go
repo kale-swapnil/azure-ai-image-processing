@@ -1,4 +1,4 @@
-package cosmos
+package functions
 
 import (
 	"context"
@@ -10,11 +10,14 @@ import (
 )
 
 func Save(imageUrl string, tags []string) error {
-	mongo.Connect(context.TODO(), options.Client().ApplyURI(os.Getenv("COSMOSDB_URI")))
+	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(os.Getenv("COSMOSDB_URI")))
+	if err != nil {
+		return err
+	}
 	defer client.Disconnect(context.TODO())
 
 	doc := bson.M{"image_url": imageUrl, "tags": tags}
-	_, err := client.Database("fashion").Collection("products").InsertOne(context.TODO(), doc)
+	_, err = client.Database("fashion").Collection("products").InsertOne(context.TODO(), doc)
 	return err
 
 }
